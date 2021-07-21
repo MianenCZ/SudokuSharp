@@ -1,6 +1,15 @@
 # SudokuSharp
 Sudoku solver and generator with  4 levels : Easy / Medium / Hard / Evil
 
+
+## Changelog since fork
+
+#### Added
+- Static method that generates one sudoku puzzle of one difficulty
+- Optional muting of priniting into std out
+- Test of static method and printing
+
+
 ### Solving an empty grid
 
 ```

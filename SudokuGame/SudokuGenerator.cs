@@ -14,6 +14,8 @@ namespace SudokuGame
 
         Dictionary<Level, List<string>> AllGrids;
 
+        public bool PrintToStdout { get; set; } = false;
+
         public SudokuGenerator(int gridsPerLevel = 10, Level genLevel = Level.Easy)
         {
             GridsPerLevel = gridsPerLevel;
@@ -102,6 +104,9 @@ namespace SudokuGame
 
         void displayGeneratedGrids()
         {
+            if (!PrintToStdout)
+                return;
+
             foreach(var e in AllGrids)
             {
                 if (e.Value.Count == 0) continue;
@@ -142,8 +147,23 @@ namespace SudokuGame
                 if ((GenLevel & Level.Hard) == Level.Hard) createHard(gridStr);
                 if ((GenLevel & Level.Evil) == Level.Evil) createEvil(gridStr);
             }
-
             displayGeneratedGrids();
+        }
+
+        public static (string[], string[]) GenerateSudoku(Level level)
+        {
+            if (level == Level.All)
+                throw new ArgumentException("This method supports only one generation per call");
+            SudokuGenerator gen = new SudokuGenerator(1, level);
+            gen.Execute();
+
+            SudokuSolver solver = new SudokuSolver(gen.AllGrids[level].First());
+            var solution = solver.Execute(false, false).Split(' ');
+            var task = gen.AllGrids[level].First().Split(' ');
+
+            
+
+            return (task, solution);
         }
     }
 }
